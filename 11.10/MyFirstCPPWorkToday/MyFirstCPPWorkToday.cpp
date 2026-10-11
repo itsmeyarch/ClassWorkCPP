@@ -1,49 +1,73 @@
-﻿#include <iostream>
+﻿#include <format>
+#include <iostream>
 #include <string>
+#include <Windows.h>
+
+std::wstring utf8_to_utf16(const std::string& utf8str) {
+	if (utf8str.empty())
+		L"";
+
+	int size = MultiByteToWideChar(CP_UTF8, 0, utf8str.c_str(), -1, nullptr, 0);
+	std::wstring result(size, 0);
+
+	MultiByteToWideChar(CP_UTF8, 0, utf8str.c_str(), -1, &result[0], size);
+	return result;
+}
 
 int main()
 {
-    std::string str = "Hello, world!";
+	std::string message = "Привіт! Це повідомлення українською мовою!";
+	std::string title = "Успішна конвертація!";
 
-    std::cout << str << '\n';
+	std::wstring wMessage = utf8_to_utf16(message);
+	std::wstring wTitle = utf8_to_utf16(title);
 
-    std::cout << str[2] << '\n';
-    str[2] = 'o';
-    std::cout << str << '\n';
+	MessageBoxW(nullptr, wMessage.c_str(), wTitle.c_str(), MB_OK | MB_ICONINFORMATION);
 
-    std::cout << str.at(3) << '\n';
-    str.at(4) = '_';
-    std::cout << str << '\n';
+	//std::string str = "Привіт😞";
+	//std::cout << str.size() << '\n';
+	//std::cout << str << '\n';
 
-    //std::cout << str[15] << '\n';
-    //std::cout << str.at(15) << '\n';
+	//int age;
+	//std::cin >> age;
 
-    std::string str2 = str + " Goodby!";
-    std::cout << str2 << '\n';
+	//std::string userName;
 
-    str += "I love C++";
-    std::cout << str << '\n';
+	////std::cin >> userName;
+	//std::cin.ignore();
+	//std::getline(std::cin, userName);
 
-    str.append("and hate JavaScript!");
-    std::cout << str << '\n';
+	//std::string result = std::format("User {} age {}", userName, age);
 
-    std::cout << str.size() << ' ' << str.length() << ' ' << str.capacity() << '\n';
+	//std::cout << result;
 
-    std::string emptyString = "";
+	//int num = 1234;
+	//std::string numS = std::to_string(12);
 
-    std::cout << (emptyString.empty() ? "string is empty" : "string is not empty") << '\n';
+	//std::string numS = "145.sajflksdjflka76";
+	//int numI = std::stoi(numS);
+	//double numD = std::stod(numS);
 
-    // Search
-    std::string str = "Hello, World";
-    size_t pos = str.find("World");
+	//std::cout << numI << '\n';
+	//std::cout << numD << '\n';
 
-    if (pos != std::string::npos)
-        std::cout << "Found 'World'. Index: " << pos << '\n';
-    else
-        std::cout << "'World' not found\n";
+	//std::string str = "Hello, world!";
 
-    std::string subStr = str.substr(0, 5);
-    std::cout << "Substring: " << subStr << '\n';
+	//str.erase(3);
+	//str.replace(7, 5, "P56");
+	//str.insert(5, "JavaScript");
+	//std::cout << str << '\n';
 
+	//auto position = str.find("world");
 
+	//if (position != std::string::npos) {
+	// std::cout << position << '\n';
+	//}
+	//else {
+	// std::cout << "world is not in str\n";
+	//}
+
+	//std::string world = str.substr(position, 5);
+
+	//std::cout << world << '\n';
 }
