@@ -24,7 +24,7 @@ int main()
     int pos = text.find(word);
 
     if (pos != std::string::npos) {
-        text.replace(pos, word.length(), "*banned*");
+        text.replace(pos, word.length(), "****");
     }
     text += " [Edited]";
 
