@@ -1,184 +1,155 @@
-﻿
-#include <iostream>
+﻿#include <iostream>
 #include <fstream>
 #include <string>
-#include <cctype>
-using namespace std;
+#include <vector>
 
+void task1()
+{
+    std::ifstream input("input.txt");
+    std::ofstream output("task1.txt");
 
-void compareFiles() {
-    ifstream file1("file1.txt");
-    ifstream file2("file2.txt");
+    std::string word;
 
-    if (!file1 || !file2) {
-        cout << "Error opening files!\n";
+    if (!input.is_open() || !output.is_open())
+    {
+        std::cout << "File error\n";
         return;
     }
 
-    string line1, line2;
-    int lineNumber = 1;
-    bool identical = true;
-
-    while (true) {
-        bool read1 = static_cast<bool>(getline(file1, line1));
-        bool read2 = static_cast<bool>(getline(file2, line2));
-
-        if (!read1 && !read2) {
-            break;
-        }
-
-        if (!read1 || !read2 || line1 != line2) {
-            identical = false;
-
-            cout << "Difference in line " << lineNumber << ":\n";
-
-            if (read1)
-                cout << "File 1: " << line1 << endl;
-            else
-                cout << "File 1: No line\n";
-
-            if (read2)
-                cout << "File 2: " << line2 << endl;
-            else
-                cout << "File 2: No line\n";
-        }
-
-        lineNumber++;
+    while (input >> word)
+    {
+        if (word.length() >= 7)
+            output << word << " ";
     }
-
-    if (identical) {
-        cout << "Files are identical.\n";
-    }
-
-    file1.close();
-    file2.close();
-}
-
-
-void fileStatistics() {
-    ifstream input("input.txt");
-    ofstream output("statistics.txt");
-
-    if (!input || !output) {
-        cout << "Error opening files!\n";
-        return;
-    }
-
-    int characters = 0;
-    int lines = 0;
-    int vowels = 0;
-    int consonants = 0;
-    int digits = 0;
-
-    string text;
-
-    while (getline(input, text)) {
-        lines++;
-
-        for (unsigned char ch : text) {
-            characters++;
-
-            if (isdigit(ch)) {
-                digits++;
-            }
-
-            char lower = tolower(ch);
-
-            if (lower == 'a' || lower == 'e' ||
-                lower == 'i' || lower == 'o' ||
-                lower == 'u' || lower == 'y') {
-                vowels++;
-            }
-            else if (isalpha(ch)) {
-                consonants++;
-            }
-        }
-    }
-
-    output << "File Statistics\n";
-    output << "Characters: " << characters << endl;
-    output << "Lines: " << lines << endl;
-    output << "Vowels: " << vowels << endl;
-    output << "Consonants: " << consonants << endl;
-    output << "Digits: " << digits << endl;
-
-    cout << "Statistics saved to statistics.txt\n";
 
     input.close();
     output.close();
+
+    std::cout << "Task 1 completed\n";
 }
 
+void task2()
+{
+    std::ifstream input("input.txt");
+    std::ofstream output("task2.txt");
 
-void caesarCipher() {
-    ifstream input("input.txt");
-    ofstream output("encrypted.txt");
+    std::string line;
 
-    if (!input || !output) {
-        cout << "Error opening files!\n";
+    if (!input.is_open() || !output.is_open())
+    {
+        std::cout << "File error\n";
         return;
     }
 
-    int key;
-    cout << "Enter encryption key: ";
-    cin >> key;
-
-    key = ((key % 26) + 26) % 26;
-
-    char ch;
-
-    while (input.get(ch)) {
-        if (ch >= 'A' && ch <= 'Z') {
-            ch = 'A' + (ch - 'A' + key) % 26;
-        }
-        else if (ch >= 'a' && ch <= 'z') {
-            ch = 'a' + (ch - 'a' + key) % 26;
-        }
-
-        output.put(ch);
-    }
-
-    cout << "Encrypted text saved to encrypted.txt\n";
+    while (std::getline(input, line))
+        output << line << "\n";
 
     input.close();
     output.close();
+
+    std::cout << "Task 2 completed\n";
 }
 
+void task3()
+{
+    std::ifstream input("input.txt");
+    std::ofstream output("task3.txt");
 
-int main() {
+    std::vector<std::string> lines;
+    std::string line;
+
+    if (!input.is_open() || !output.is_open())
+    {
+        std::cout << "File error\n";
+        return;
+    }
+
+    while (std::getline(input, line))
+        lines.push_back(line);
+
+    for (int i = static_cast<int>(lines.size()) - 1; i >= 0; i--)
+        output << lines[i] << "\n";
+
+    input.close();
+    output.close();
+
+    std::cout << "Task 3 completed\n";
+}
+
+void task4()
+{
+    std::ifstream input("input.txt");
+    std::ofstream output("task4.txt");
+
+    std::vector<std::string> lines;
+    std::string line;
+    int position = -1;
+
+    if (!input.is_open() || !output.is_open())
+    {
+        std::cout << "File error\n";
+        return;
+    }
+
+    while (std::getline(input, line))
+    {
+        lines.push_back(line);
+
+        if (line.find(' ') == std::string::npos)
+            position = static_cast<int>(lines.size()) - 1;
+    }
+
+    for (int i = 0; i < static_cast<int>(lines.size()); i++)
+    {
+        output << lines[i] << "\n";
+
+        if (i == position)
+            output << "------------\n";
+    }
+
+    if (position == -1)
+        output << "------------\n";
+
+    input.close();
+    output.close();
+
+    std::cout << "Task 4 completed\n";
+}
+
+int main()
+{
     int choice;
 
-    do {
-        cout << "===== FILE OPERATIONS MENU =====";
-        cout << "1. Compare two files\n";
-        cout << "2. Calculate file statistics\n";
-        cout << "3. Encrypt file using Caesar cipher\n";
-        cout << "4. Exit";
-        cout << "Choose option: ";
+    do
+    {
+        std::cout << "\n1. Copy words with at least 7 letters\n";
+        std::cout << "2. Copy lines in the same order\n";
+        std::cout << "3. Copy lines in reverse order\n";
+        std::cout << "4. Add a line of dashes\n";
+        std::cout << "0. Exit\n";
+        std::cout << "Choose task: ";
+        std::cin >> choice;
 
-        cin >> choice;
-
-        switch (choice) {
+        switch (choice)
+        {
         case 1:
-            compareFiles();
+            task1();
             break;
-
         case 2:
-            fileStatistics();
+            task2();
             break;
-
         case 3:
-            caesarCipher();
+            task3();
             break;
-
         case 4:
-            cout << "Program finished.\n";
+            task4();
             break;
-
+        case 0:
+            std::cout << "Exit\n";
+            break;
         default:
-            cout << "Invalid option!\n";
+            std::cout << "Wrong choice\n";
         }
 
-    } while (choice != 4);
-
-    return 0;
+    } while (choice != 0);
 }
