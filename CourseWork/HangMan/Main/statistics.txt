@@ -10,3 +10,9 @@ Time: 39 seconds
 Attempts: 10
 Word: keyboard
 Your letters: a b i r t e m n v c 
+-------------------------
+Result: Win
+Time: 125 seconds
+Attempts: 12
+Word: elephant
+Your letters: a e m b r g n c t l p h 
