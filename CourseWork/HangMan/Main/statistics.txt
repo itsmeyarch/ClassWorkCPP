@@ -8,3 +8,9 @@ Result: Lose
 Attempts: 4
 Word: sunshine
 Your letters: a b c d 
+-------------------------
+Result: Lose
+Time: 7.91 seconds
+Attempts: 5
+Word: football
+Your letters: x c v b n 

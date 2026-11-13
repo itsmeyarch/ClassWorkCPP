@@ -2,8 +2,9 @@
 
 #include <iostream>
 #include <fstream>
+#include <iomanip>
 
-Statistics::Statistics() : attempts(0), wins(0), losses(0) {
+Statistics::Statistics() : attempts(0), wins(0), losses(0), elapsedSeconds(0.0) {
     std::ifstream file("total.txt");
 
     if (file.is_open()) {
@@ -13,6 +14,7 @@ Statistics::Statistics() : attempts(0), wins(0), losses(0) {
 
 void Statistics::resetGame() {
     attempts = 0;
+    elapsedSeconds = 0.0;
     secretWord.clear();
     guessedLetters.clear();
 }
@@ -26,9 +28,14 @@ void Statistics::addAttempt(char letter) {
     guessedLetters.push_back(letter);
 }
 
+void Statistics::setTime(double seconds) {
+    elapsedSeconds = seconds;
+}
+
 void Statistics::print(bool won) const {
     std::cout << "\n--- Game statistics ---\n";
     std::cout << "Result: " << (won ? "Win" : "Lose") << "\n";
+    std::cout << "Time: " << std::fixed << std::setprecision(2) << elapsedSeconds << " seconds\n";
     std::cout << "Attempts: " << attempts << "\n";
     std::cout << "Word: " << secretWord << "\n";
 
@@ -47,6 +54,7 @@ void Statistics::save(bool won, const std::string& fileName) {
     if (file.is_open()) {
         file << "-------------------------\n";
         file << "Result: " << (won ? "Win" : "Lose") << "\n";
+        file << "Time: " << std::fixed << std::setprecision(2) << elapsedSeconds << " seconds\n";
         file << "Attempts: " << attempts << "\n";
         file << "Word: " << secretWord << "\n";
         file << "Your letters: ";
@@ -76,14 +84,12 @@ void Statistics::save(bool won, const std::string& fileName) {
     }
 }
 
-
 void Statistics::printTotal() const {
     std::cout << "\n--- TOTAL STATISTICS ---\n";
     std::cout << "Games played: " << wins + losses << "\n";
     std::cout << "Wins: " << wins << "\n";
     std::cout << "Losses: " << losses << "\n";
 }
-
 
 void Statistics::printHistory(const std::string& fileName) const {
     std::ifstream file(fileName);

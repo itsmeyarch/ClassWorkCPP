@@ -6,6 +6,7 @@
 #include <random>
 #include <stdexcept>
 #include <vector>
+#include <chrono>
 
 Game::Game()
     : wordCase("words.txt", 0x5A),
@@ -141,6 +142,8 @@ void Game::playGame() {
             std::cout << "You have " << maxMistakes
                 << " mistakes available.\n";
 
+            auto startTime = std::chrono::steady_clock::now();
+
             while (mistakes < maxMistakes && !checkWin()) {
                 showWord();
                 showHangman();
@@ -195,6 +198,10 @@ void Game::playGame() {
                     std::cout << "Correct!\n";
                 }
             }
+
+            auto endTime = std::chrono::steady_clock::now();
+            std::chrono::duration<double> elapsed = endTime - startTime;
+            statistics.setTime(elapsed.count());
 
             bool won = checkWin();
 

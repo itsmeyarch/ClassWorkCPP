@@ -10,6 +10,7 @@ private:
     int attempts;
     int wins;
     int losses;
+    double elapsedSeconds;
 
     std::string secretWord;
     std::vector<char> guessedLetters;
@@ -20,6 +21,7 @@ public:
     void resetGame();
     void setSecretWord(const std::string& word);
     void addAttempt(char letter);
+    void setTime(double seconds);
 
     void print(bool won) const;
     void save(bool won, const std::string& fileName);
