@@ -1,0 +1,12 @@
+-------------------------
+Result: Lose
+Time: 43 seconds
+Attempts: 9
+Word: journey
+Your letters: a b i o p w e r m 
+-------------------------
+Result: Lose
+Time: 39 seconds
+Attempts: 10
+Word: keyboard
+Your letters: a b i r t e m n v c 
