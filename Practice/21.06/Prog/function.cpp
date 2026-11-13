@@ -1,19 +1,23 @@
 #include "function.h"
 #include <iostream>
 #include <cstdlib>
+#include <ctime>
 
-void FillArrayInt(int arr[], int size) {
+void FillArrayInt(int arr[], int size)
+{
     for (int i = 0; i < size; i++)
         arr[i] = rand() % 100;
 }
 
-void ShowArrayInt(int arr[], int size) {
+void ShowArrayInt(int arr[], int size)
+{
     for (int i = 0; i < size; i++)
-        std::cout << arr[i] << ' ';
-    std::cout << '\n';
+        std::cout << arr[i] << " ";
+    std::cout << "\n";
 }
 
-int FindMinInt(int arr[], int size) {
+int FindMinInt(int arr[], int size)
+{
     int min = arr[0];
 
     for (int i = 1; i < size; i++)
@@ -23,7 +27,8 @@ int FindMinInt(int arr[], int size) {
     return min;
 }
 
-int FindMaxInt(int arr[], int size) {
+int FindMaxInt(int arr[], int size)
+{
     int max = arr[0];
 
     for (int i = 1; i < size; i++)
@@ -33,42 +38,39 @@ int FindMaxInt(int arr[], int size) {
     return max;
 }
 
-void SortArrayInt(int arr[], int size) {
+void SortArrayInt(int arr[], int size)
+{
     for (int i = 0; i < size - 1; i++)
         for (int j = 0; j < size - i - 1; j++)
-            if (arr[j] > arr[j + 1]) {
+            if (arr[j] > arr[j + 1])
+            {
                 int temp = arr[j];
                 arr[j] = arr[j + 1];
                 arr[j + 1] = temp;
             }
 }
 
-void EditArrayInt(int arr[], int size) {
-    int index, value;
-
-    std::cout << "Index: ";
-    std::cin >> index;
-
-    std::cout << "New value: ";
-    std::cin >> value;
-
+void EditArrayInt(int arr[], int size, int index, int value)
+{
     if (index >= 0 && index < size)
         arr[index] = value;
 }
 
-
-void FillArrayDouble(double arr[], int size) {
+void FillArrayDouble(double arr[], int size)
+{
     for (int i = 0; i < size; i++)
-        arr[i] = rand() % 100;
+        arr[i] = (rand() % 1000) / 10.0;
 }
 
-void ShowArrayDouble(double arr[], int size) {
+void ShowArrayDouble(double arr[], int size)
+{
     for (int i = 0; i < size; i++)
-        std::cout << arr[i] << ' ';
-    std::cout << '\n';
+        std::cout << arr[i] << " ";
+    std::cout << "\n";
 }
 
-double FindMinDouble(double arr[], int size) {
+double FindMinDouble(double arr[], int size)
+{
     double min = arr[0];
 
     for (int i = 1; i < size; i++)
@@ -78,7 +80,8 @@ double FindMinDouble(double arr[], int size) {
     return min;
 }
 
-double FindMaxDouble(double arr[], int size) {
+double FindMaxDouble(double arr[], int size)
+{
     double max = arr[0];
 
     for (int i = 1; i < size; i++)
@@ -88,33 +91,39 @@ double FindMaxDouble(double arr[], int size) {
     return max;
 }
 
-void SortArrayDouble(double arr[], int size) {
+void SortArrayDouble(double arr[], int size)
+{
     for (int i = 0; i < size - 1; i++)
         for (int j = 0; j < size - i - 1; j++)
-            if (arr[j] > arr[j + 1]) {
+            if (arr[j] > arr[j + 1])
+            {
                 double temp = arr[j];
                 arr[j] = arr[j + 1];
                 arr[j + 1] = temp;
             }
 }
 
-void EditArrayDouble(double arr[], int size) {
+void EditArrayDouble(double arr[], int size, int index, double value)
+{
+    if (index >= 0 && index < size)
+        arr[index] = value;
 }
 
-
-
-void FillArrayChar(char arr[], int size) {
+void FillArrayChar(char arr[], int size)
+{
     for (int i = 0; i < size; i++)
         arr[i] = 'A' + rand() % 26;
 }
 
-void ShowArrayChar(char arr[], int size) {
+void ShowArrayChar(char arr[], int size)
+{
     for (int i = 0; i < size; i++)
-        std::cout << arr[i] << ' ';
-    std::cout << '\n';
+        std::cout << arr[i] << " ";
+    std::cout << "\n";
 }
 
-char FindMinChar(char arr[], int size) {
+char FindMinChar(char arr[], int size)
+{
     char min = arr[0];
 
     for (int i = 1; i < size; i++)
@@ -124,7 +133,8 @@ char FindMinChar(char arr[], int size) {
     return min;
 }
 
-char FindMaxChar(char arr[], int size) {
+char FindMaxChar(char arr[], int size)
+{
     char max = arr[0];
 
     for (int i = 1; i < size; i++)
@@ -134,15 +144,20 @@ char FindMaxChar(char arr[], int size) {
     return max;
 }
 
-void SortArrayChar(char arr[], int size) {
+void SortArrayChar(char arr[], int size)
+{
     for (int i = 0; i < size - 1; i++)
         for (int j = 0; j < size - i - 1; j++)
-            if (arr[j] > arr[j + 1]) {
+            if (arr[j] > arr[j + 1])
+            {
                 char temp = arr[j];
                 arr[j] = arr[j + 1];
                 arr[j + 1] = temp;
             }
 }
 
-void EditArrayChar(char arr[], int size) {
+void EditArrayChar(char arr[], int size, int index, char value)
+{
+    if (index >= 0 && index < size)
+        arr[index] = value;
 }
