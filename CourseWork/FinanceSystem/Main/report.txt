@@ -1,0 +1,5 @@
+--- FINANCIAL REPORT ---
+Total Income: 10109
+Total Expenses: 9
+Expenses by category:
+  - Food: 9
