@@ -1,93 +1,175 @@
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 
-using namespace std;
+// Task 1
 
-//1
-//int rec(int number, int degree) {
-//	if (degree == 0);
-//	return 1;
-//	
-//	return number * rec(number, degree - 1);
-//}
-//2
-//void nemesis(int N) {
-//	if (N <= 0)
-//		return;
-//	cout << "*";
-//	nemesis(N - 1);
-//}
-//3
-//int SumRange(int num1, int num2) {
-//	if (num1 == num2);
-//	return num1;
-//
-//	return num1 + SumRange(num1 + 1, num2);
-//}
-//4
-int mass10(int arr[], int start, int count) {
-	if (count == 0)
-		return 0;
+double power(double number, int degree) {
+    if (degree == 0) {
+        return 1;
+    }
 
-	return arr[start] + mass10(arr, start + 1, count - 1);
+    if (degree < 0) {
+        return 1.0 / power(number, -degree);
+    }
+
+    return number * power(number, degree - 1);
 }
 
-void FindMass(int arr[], int index, int minMass, int pos) {
-	if (index > 90)
-		return;
-	int currMass = mass10(arr, index, 10);
-	if (currMass < minMass) {
-		minMass = currMass;
-		pos = index;
-	}
-	FindMass(arr, index + 1, minMass, pos);
+// Task 2
+
+void printStars(int n) {
+    if (n <= 0) {
+        return;
+    }
+
+    std::cout << "*";
+    printStars(n - 1);
 }
 
+// Task 3
 
-int main()
-{
-	//Task 1 - Write a recursive function to find the power of a number. The number and the exponent are entered by the user.
-	/*int number, degree;
-	cout << "Put Number: ";
-	cin >> number;
-	cout << "Put degree: ";
-	cin >> degree;
+int sumRange(int a, int b) {
+    if (a > b) {
+        return 0;
+    }
 
-	cout << "Result: " << rec(number, degree);
-	cout << '\n';*/
-	//Task 2 - Write a recursive function that prints N stars in a row, where the number N is specified by the user. Illustrate the function's work with an example. 
-	/*int N;
-	cout << "Put how many stars\n";
-	cin >> N;
+    if (a == b) {
+        return a;
+    }
 
-	cout << "Result: ";
-	nemesis(N);
-	cout << '\n';*/
-	//Task 3 - Write a recursive function that calculates the sum of all numbers in the range from a to b. The user enters a and b. Illustrate the function's work with an example.
-	/*int num1, num2;
-	cout << "Put first num - num1: ";
-	cin >> num1;
-	cout << "Put second num - num2: ";
-	cin >> num2;
+    return a + sumRange(a + 1, b);
+}
 
-	cout << "Sum of nums from " << num1 << " to " << num2 << " = " << SumRange(num1,num2);
-	cout << '\n';*/
-	//Task 4 - Write a recursive function that takes a one-dimensional array of 100 integers, randomly filled, and finds the position where a sequence of 10 numbers with the minimum sum begins.
+// Task 4
 
-	srand(time(NULL));
-	int arr[100];
+int findMinSequence(int arr[], int index, int currentSum, int minSum, int minPosition) {
+    if (index == 100) {
+        return minPosition;
+    }
 
-	for (int i = 0; i < 100; i++) {
-		arr[i] = rand() % 100;
-	}
-	
-	cout << "Massive: ";
-	for (int i = 0; i < 100; i++) {
-		cout << arr[i] << ' ';
-	}
+    currentSum += arr[index];
 
-	int minMass = mass10(arr, 0, 10);
-	int pos = 0;
-	FindMass(arr, 0, minMass, pos);
+    if (index >= 9) {
+        if (currentSum < minSum) {
+            minSum = currentSum;
+            minPosition = index - 9;
+        }
 
-	cout << "Start Pos: ";
+        currentSum -= arr[index - 9];
+    }
+
+    return findMinSequence(arr, index + 1, currentSum, minSum, minPosition);
+}
+
+int findMinSequence(int arr[]) {
+    int sum = 0;
+
+    for (int i = 0; i < 10; i++) {
+        sum += arr[i];
+    }
+
+    return findMinSequence(arr, 0, 0, 2147483647, 0);
+}
+
+int main() {
+    srand(static_cast<unsigned int>(time(nullptr)));
+
+    int choice;
+
+    do {
+        std::cout << "\n1. Power of a number\n";
+        std::cout << "2. Print stars\n";
+        std::cout << "3. Sum of range\n";
+        std::cout << "4. Minimum sequence of 10 numbers\n";
+        std::cout << "5. Exit\n";
+        std::cout << "Choose task: ";
+        std::cin >> choice;
+
+        // Task 1
+
+        if (choice == 1) {
+            double number;
+            int degree;
+
+            std::cout << "Enter number: ";
+            std::cin >> number;
+
+            std::cout << "Enter degree: ";
+            std::cin >> degree;
+
+            if (number == 0 && degree < 0) {
+                std::cout << "Invalid operation!\n";
+            }
+            else {
+                std::cout << "Result: " << power(number, degree) << "\n";
+            }
+        }
+
+        // Task 2
+
+        else if (choice == 2) {
+            int n;
+
+            std::cout << "Enter number of stars: ";
+            std::cin >> n;
+
+            printStars(n);
+            std::cout << "\n";
+        }
+
+        // Task 3
+
+        else if (choice == 3) {
+            int a, b;
+
+            std::cout << "Enter a: ";
+            std::cin >> a;
+
+            std::cout << "Enter b: ";
+            std::cin >> b;
+
+            if (a > b) {
+                std::swap(a, b);
+            }
+
+            std::cout << "Sum: " << sumRange(a, b) << "\n";
+        }
+
+        // Task 4
+
+        else if (choice == 4) {
+            int arr[100];
+
+            std::cout << "Array:\n";
+
+            for (int i = 0; i < 100; i++) {
+                arr[i] = rand() % 101 - 50;
+                std::cout << arr[i] << " ";
+
+                if ((i + 1) % 10 == 0) {
+                    std::cout << "\n";
+                }
+            }
+
+            int position = findMinSequence(arr);
+            int minSum = 0;
+
+            for (int i = position; i < position + 10; i++) {
+                minSum += arr[i];
+            }
+
+            std::cout << "Starting position: " << position + 1 << "\n";
+            std::cout << "Minimum sum: " << minSum << "\n";
+
+            std::cout << "Sequence: ";
+
+            for (int i = position; i < position + 10; i++) {
+                std::cout << arr[i] << " ";
+            }
+
+            std::cout << "\n";
+        }
+
+    } while (choice != 5);
 }
