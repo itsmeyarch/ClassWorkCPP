@@ -1,8 +1,9 @@
 ﻿#include <iostream>
+#include <cmath>
+#include <string>
+#include <limits>
 
-using namespace std;
-
-//1
+// Task 1
 
 struct Point {
     double x;
@@ -10,323 +11,529 @@ struct Point {
 };
 
 double distance(Point a, Point b) {
-    return sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
+    double dx = a.x - b.x;
+    double dy = a.y - b.y;
+
+    return std::sqrt(dx * dx + dy * dy);
 }
 
+void task1() {
+    Point a, b;
 
-//2
+    std::cout << "Enter coordinates of the first point: ";
+    std::cin >> a.x >> a.y;
+
+    std::cout << "Enter coordinates of the second point: ";
+    std::cin >> b.x >> b.y;
+
+    std::cout << "Distance: " << distance(a, b) << "\n";
+}
+
+// Task 2
 
 struct Fraction {
     int numerator;
     int denominator;
 };
 
-int gcdFraction(int a, int b) {
-    if (b == 0)
-        return a;
-    return gcdFraction(b, a % b);
+int gcd(int a, int b) {
+    a = std::abs(a);
+    b = std::abs(b);
+
+    while (b != 0) {
+        int temp = b;
+        b = a % b;
+        a = temp;
+    }
+
+    return a;
 }
 
-Fraction reduceFraction(Fraction f) {
-    int divisor = gcdFraction(abs(f.numerator), abs(f.denominator));
-
-    if (divisor != 0) {
-        f.numerator /= divisor;
-        f.denominator /= divisor;
-    }
-
+Fraction simplify(Fraction f) {
     if (f.denominator < 0) {
-        f.denominator = -f.denominator;
         f.numerator = -f.numerator;
+        f.denominator = -f.denominator;
     }
+
+    int d = gcd(f.numerator, f.denominator);
+
+    f.numerator /= d;
+    f.denominator /= d;
 
     return f;
 }
 
-Fraction addFraction(Fraction a, Fraction b) {
+Fraction addFractions(Fraction a, Fraction b) {
     Fraction result;
-    result.numerator = a.numerator * b.denominator + b.numerator * a.denominator;
+
+    result.numerator = a.numerator * b.denominator +
+        b.numerator * a.denominator;
     result.denominator = a.denominator * b.denominator;
-    return reduceFraction(result);
+
+    return simplify(result);
 }
 
-Fraction subFraction(Fraction a, Fraction b) {
+Fraction subtractFractions(Fraction a, Fraction b) {
     Fraction result;
-    result.numerator = a.numerator * b.denominator - b.numerator * a.denominator;
+
+    result.numerator = a.numerator * b.denominator -
+        b.numerator * a.denominator;
     result.denominator = a.denominator * b.denominator;
-    return reduceFraction(result);
+
+    return simplify(result);
 }
 
-Fraction mulFraction(Fraction a, Fraction b) {
+Fraction multiplyFractions(Fraction a, Fraction b) {
     Fraction result;
+
     result.numerator = a.numerator * b.numerator;
     result.denominator = a.denominator * b.denominator;
-    return reduceFraction(result);
+
+    return simplify(result);
 }
 
-Fraction divFraction(Fraction a, Fraction b) {
+Fraction divideFractions(Fraction a, Fraction b) {
     Fraction result;
+
     result.numerator = a.numerator * b.denominator;
     result.denominator = a.denominator * b.numerator;
-    return reduceFraction(result);
+
+    return simplify(result);
 }
 
 void printFraction(Fraction f) {
-    if (abs(f.numerator) >= abs(f.denominator) && f.denominator != 0) {
-        int whole = f.numerator / f.denominator;
-        int rem = abs(f.numerator % f.denominator);
+    f = simplify(f);
 
-        if (rem == 0)
-            cout << whole << "\n";
-        else
-            cout << whole << " " << rem << "/" << abs(f.denominator) << "\n";
+    int whole = f.numerator / f.denominator;
+    int remainder = std::abs(f.numerator % f.denominator);
+
+    if (remainder == 0) {
+        std::cout << whole;
+    }
+    else if (whole != 0) {
+        std::cout << whole << " " << remainder << "/" << f.denominator;
     }
     else {
-        cout << f.numerator << "/" << f.denominator << "\n";
+        std::cout << f.numerator << "/" << f.denominator;
+    }
+
+    std::cout << "\n";
+}
+
+void task2() {
+    Fraction a, b;
+
+    std::cout << "Enter first fraction (numerator denominator): ";
+    std::cin >> a.numerator >> a.denominator;
+
+    std::cout << "Enter second fraction (numerator denominator): ";
+    std::cin >> b.numerator >> b.denominator;
+
+    if (a.denominator == 0 || b.denominator == 0) {
+        std::cout << "Denominator cannot be zero\n";
+        return;
+    }
+
+    a = simplify(a);
+    b = simplify(b);
+
+    std::cout << "Sum: ";
+    printFraction(addFractions(a, b));
+
+    std::cout << "Difference: ";
+    printFraction(subtractFractions(a, b));
+
+    std::cout << "Multiplication: ";
+    printFraction(multiplyFractions(a, b));
+
+    if (b.numerator != 0) {
+        std::cout << "Division: ";
+        printFraction(divideFractions(a, b));
+    }
+    else {
+        std::cout << "Division by zero is impossible\n";
     }
 }
 
-
-//3
+// Task 3
 
 struct WashingMachine {
-    char brand[30];
-    char color[20];
+    std::string brand;
+    std::string color;
     double width;
     double length;
     double height;
-    double power;
+    int power;
     int spinSpeed;
-    int maxTemperature;
+    int temperature;
 };
 
-void printWashingMachine(WashingMachine wm) {
-    cout << "Brand: " << wm.brand << "\n";
-    cout << "Color: " << wm.color << "\n";
-    cout << "Dimensions: " << wm.width << "x" << wm.length << "x" << wm.height << " cm\n";
-    cout << "Power: " << wm.power << " kW\n";
-    cout << "Spin speed: " << wm.spinSpeed << " rpm\n";
-    cout << "Max temperature: " << wm.maxTemperature << " C\n";
+void task3() {
+    WashingMachine machine;
+
+    std::cout << "Enter brand: ";
+    std::cin >> machine.brand;
+
+    std::cout << "Enter color: ";
+    std::cin >> machine.color;
+
+    std::cout << "Enter width: ";
+    std::cin >> machine.width;
+
+    std::cout << "Enter length: ";
+    std::cin >> machine.length;
+
+    std::cout << "Enter height: ";
+    std::cin >> machine.height;
+
+    std::cout << "Enter power: ";
+    std::cin >> machine.power;
+
+    std::cout << "Enter spin speed: ";
+    std::cin >> machine.spinSpeed;
+
+    std::cout << "Enter heating temperature: ";
+    std::cin >> machine.temperature;
+
+    std::cout << "\nWashing machine information:\n";
+    std::cout << "Brand: " << machine.brand << "\n";
+    std::cout << "Color: " << machine.color << "\n";
+    std::cout << "Width: " << machine.width << "\n";
+    std::cout << "Length: " << machine.length << "\n";
+    std::cout << "Height: " << machine.height << "\n";
+    std::cout << "Power: " << machine.power << " W\n";
+    std::cout << "Spin speed: " << machine.spinSpeed << " rpm\n";
+    std::cout << "Temperature: " << machine.temperature << " C\n";
 }
 
-
-//4
+// Task 4
 
 struct Animal {
-    char name[30];
-    char species[30];
-    char nickname[30];
+    std::string name;
+    std::string species;
+    std::string nickname;
 };
 
-void fillAnimal(Animal& a, const char* name, const char* species, const char* nickname) {
-    strcpy(a.name, name);
-    strcpy(a.species, species);
-    strcpy(a.nickname, nickname);
+void fillAnimal(Animal& animal) {
+    std::cout << "Enter animal name: ";
+    std::cin >> animal.name;
+
+    std::cout << "Enter species: ";
+    std::cin >> animal.species;
+
+    std::cout << "Enter nickname: ";
+    std::cin >> animal.nickname;
 }
 
-void printAnimal(Animal a) {
-    cout << "Name: " << a.name << ", Species: " << a.species << ", Nickname: " << a.nickname << "\n";
+void printAnimal(const Animal& animal) {
+    std::cout << "Name: " << animal.name << "\n";
+    std::cout << "Species: " << animal.species << "\n";
+    std::cout << "Nickname: " << animal.nickname << "\n";
 }
 
-void makeSound(Animal a) {
-    if (strcmp(a.species, "Dog") == 0)
-        cout << a.nickname << " says: Woof!\n";
-    else if (strcmp(a.species, "Cat") == 0)
-        cout << a.nickname << " says: Meow!\n";
-    else if (strcmp(a.species, "Cow") == 0)
-        cout << a.nickname << " says: Moo!\n";
-    else
-        cout << a.nickname << " makes an unknown sound.\n";
+void makeSound(Animal animal) {
+    if (animal.species == "dog") {
+        std::cout << animal.nickname << ": Woof!\n";
+    }
+    else if (animal.species == "cat") {
+        std::cout << animal.nickname << ": Meow!\n";
+    }
+    else if (animal.species == "cow") {
+        std::cout << animal.nickname << ": Moo!\n";
+    }
+    else if (animal.species == "duck") {
+        std::cout << animal.nickname << ": Quack!\n";
+    }
+    else {
+        std::cout << animal.nickname << " makes a sound\n";
+    }
 }
 
+void task4() {
+    Animal animal;
 
-//5
+    fillAnimal(animal);
+    printAnimal(animal);
+    makeSound(animal);
+}
 
-union IntUnion {
-    int signedValue;
-    unsigned int unsignedValue;
+// Task 5
+
+union Number {
+    int signedNumber;
+    unsigned int unsignedNumber;
 };
 
+void task5() {
+    Number number;
 
-//6
+    std::cout << "Enter an integer: ";
+    std::cin >> number.signedNumber;
+
+    std::cout << "Signed value: " << number.signedNumber << "\n";
+    std::cout << "Unsigned value: " << number.unsignedNumber << "\n";
+
+    std::cout << "Enter an unsigned integer: ";
+    std::cin >> number.unsignedNumber;
+
+    std::cout << "Unsigned value: " << number.unsignedNumber << "\n";
+    std::cout << "Signed value: " << number.signedNumber << "\n";
+}
+
+// Task 6
 
 struct Student {
-    char fullName[50];
-    unsigned grades : 1;
-    unsigned grade2 : 1;
-    unsigned grade3 : 1;
-    unsigned grade4 : 1;
-    unsigned grade5 : 1;
-    unsigned grade6 : 1;
-    unsigned grade7 : 1;
-    unsigned grade8 : 1;
-    unsigned grade9 : 1;
-    unsigned grade10 : 1;
+    std::string surname;
+    std::string name;
+    std::string patronymic;
+
+    unsigned int grade1 : 1;
+    unsigned int grade2 : 1;
+    unsigned int grade3 : 1;
+    unsigned int grade4 : 1;
+    unsigned int grade5 : 1;
+    unsigned int grade6 : 1;
+    unsigned int grade7 : 1;
+    unsigned int grade8 : 1;
+    unsigned int grade9 : 1;
+    unsigned int grade10 : 1;
 };
 
-void fillStudent(Student& s, const char* name) {
-    strcpy(s.fullName, name);
-    s.grades = 0;
-    s.grade2 = 0;
-    s.grade3 = 0;
-    s.grade4 = 0;
-    s.grade5 = 0;
-    s.grade6 = 0;
-    s.grade7 = 0;
-    s.grade8 = 0;
-    s.grade9 = 0;
-    s.grade10 = 0;
-}
-
-void printStudent(Student s) {
-    cout << "Name: " << s.fullName << ", Grades: ";
-    cout << s.grades << s.grade2 << s.grade3 << s.grade4 << s.grade5;
-    cout << s.grade6 << s.grade7 << s.grade8 << s.grade9 << s.grade10 << "\n";
-}
-
-double averageGrade(Student s) {
-    int sum = s.grades + s.grade2 + s.grade3 + s.grade4 + s.grade5 +
-        s.grade6 + s.grade7 + s.grade8 + s.grade9 + s.grade10;
-    return (double)sum / 10.0;
-}
-
-void setGrade(Student& s, int subjectIndex, bool passed) {
-    switch (subjectIndex) {
-    case 1: s.grades = passed; break;
-    case 2: s.grade2 = passed; break;
-    case 3: s.grade3 = passed; break;
-    case 4: s.grade4 = passed; break;
-    case 5: s.grade5 = passed; break;
-    case 6: s.grade6 = passed; break;
-    case 7: s.grade7 = passed; break;
-    case 8: s.grade8 = passed; break;
-    case 9: s.grade9 = passed; break;
-    case 10: s.grade10 = passed; break;
+void setGrade(Student& student, int index, unsigned int value) {
+    switch (index) {
+    case 0: student.grade1 = value; break;
+    case 1: student.grade2 = value; break;
+    case 2: student.grade3 = value; break;
+    case 3: student.grade4 = value; break;
+    case 4: student.grade5 = value; break;
+    case 5: student.grade6 = value; break;
+    case 6: student.grade7 = value; break;
+    case 7: student.grade8 = value; break;
+    case 8: student.grade9 = value; break;
+    case 9: student.grade10 = value; break;
     }
 }
 
-void printStudentList(Student* students, int count) {
-    for (int i = 0; i < count; i++)
-        cout << i << ". " << students[i].fullName << "\n";
+unsigned int getGrade(const Student& student, int index) {
+    switch (index) {
+    case 0: return student.grade1;
+    case 1: return student.grade2;
+    case 2: return student.grade3;
+    case 3: return student.grade4;
+    case 4: return student.grade5;
+    case 5: return student.grade6;
+    case 6: return student.grade7;
+    case 7: return student.grade8;
+    case 8: return student.grade9;
+    case 9: return student.grade10;
+    }
+
+    return 0;
 }
 
-void printStudentGrades(Student* students, int count, int index) {
-    if (index >= 0 && index < count)
-        printStudent(students[index]);
+void fillStudent(Student& student) {
+    std::cout << "Enter surname: ";
+    std::cin >> student.surname;
+
+    std::cout << "Enter name: ";
+    std::cin >> student.name;
+
+    std::cout << "Enter patronymic: ";
+    std::cin >> student.patronymic;
+
+    for (int i = 0; i < 10; i++) {
+        setGrade(student, i, 0);
+    }
 }
 
-void printDebtors(Student* students, int count) {
-    cout << "Debtors (with at least one failed subject):\n";
+void printStudent(const Student& student) {
+    std::cout << student.surname << " "
+        << student.name << " "
+        << student.patronymic << "\n";
 
+    int passed = 0;
+
+    for (int i = 0; i < 10; i++) {
+        unsigned int grade = getGrade(student, i);
+
+        std::cout << "Subject " << i + 1 << ": "
+            << (grade ? "Passed" : "Failed") << "\n";
+
+        passed += grade;
+    }
+
+    std::cout << "Average grade: " << passed / 10.0 << "\n";
+}
+
+void printStudentList(Student students[], int count) {
     for (int i = 0; i < count; i++) {
-        if (averageGrade(students[i]) < 1.0)
-            cout << students[i].fullName << "\n";
+        std::cout << i + 1 << ". "
+            << students[i].surname << " "
+            << students[i].name << " "
+            << students[i].patronymic << "\n";
     }
 }
 
+void task6() {
+    Student student;
+    fillStudent(student);
+
+    std::cout << "\nStudent information:\n";
+    printStudent(student);
+
+    Student students[100];
+    int count = 0;
+    int choice;
+
+    do {
+        std::cout << "\n1. Add student\n";
+        std::cout << "2. Set student grades\n";
+        std::cout << "3. Show student list\n";
+        std::cout << "4. Show grades of a student\n";
+        std::cout << "5. Show students with failed subjects\n";
+        std::cout << "0. Exit\n";
+        std::cout << "Choose: ";
+        std::cin >> choice;
+
+        switch (choice) {
+        case 1:
+            if (count < 100) {
+                fillStudent(students[count]);
+                count++;
+            }
+            else {
+                std::cout << "Student list is full\n";
+            }
+            break;
+
+        case 2: {
+            int index;
+
+            if (count == 0) {
+                std::cout << "No students\n";
+                break;
+            }
+
+            printStudentList(students, count);
+
+            std::cout << "Enter student number: ";
+            std::cin >> index;
+
+            if (index < 1 || index > count) {
+                std::cout << "Invalid student number\n";
+                break;
+            }
+
+            for (int i = 0; i < 10; i++) {
+                int grade;
+
+                std::cout << "Subject " << i + 1
+                    << " (1 - passed, 0 - failed): ";
+                std::cin >> grade;
+
+                if (grade != 0 && grade != 1) {
+                    grade = 0;
+                }
+
+                setGrade(students[index - 1], i, grade);
+            }
+            break;
+        }
+
+        case 3:
+            printStudentList(students, count);
+            break;
+
+        case 4: {
+            int index;
+
+            if (count == 0) {
+                std::cout << "No students\n";
+                break;
+            }
+
+            printStudentList(students, count);
+
+            std::cout << "Enter student number: ";
+            std::cin >> index;
+
+            if (index >= 1 && index <= count) {
+                printStudent(students[index - 1]);
+            }
+            else {
+                std::cout << "Invalid student number\n";
+            }
+            break;
+        }
+
+        case 5:
+            for (int i = 0; i < count; i++) {
+                bool hasFailed = false;
+
+                for (int j = 0; j < 10; j++) {
+                    if (getGrade(students[i], j) == 0) {
+                        hasFailed = true;
+                        break;
+                    }
+                }
+
+                if (hasFailed) {
+                    std::cout << students[i].surname << " "
+                        << students[i].name << " "
+                        << students[i].patronymic << "\n";
+                }
+            }
+            break;
+
+        case 0:
+            break;
+
+        default:
+            std::cout << "Invalid choice\n";
+        }
+
+    } while (choice != 0);
+}
+
+// Main
 
 int main() {
-    cout << "=== Task 1: Points ===\n";
+    int choice;
 
-    Point p1 = { 1.0, 2.0 };
-    Point p2 = { 4.0, 6.0 };
+    do {
+        std::cout << "\n1. Distance between points\n";
+        std::cout << "2. Fraction operations\n";
+        std::cout << "3. Washing machine\n";
+        std::cout << "4. Animal\n";
+        std::cout << "5. Union of integers\n";
+        std::cout << "6. Students and grades\n";
+        std::cout << "0. Exit\n";
+        std::cout << "Choose task: ";
+        std::cin >> choice;
 
-    cout << "Distance between points: " << distance(p1, p2) << "\n";
-
-    cout << "\n=== Task 2: Fractions ===\n";
-
-    Fraction f1 = { 3, 4 };
-    Fraction f2 = { 1, 6 };
-
-    cout << "Fraction 1: ";
-    printFraction(f1);
-    cout << "Fraction 2: ";
-    printFraction(f2);
-
-    cout << "Sum: ";
-    printFraction(addFraction(f1, f2));
-
-    cout << "Difference: ";
-    printFraction(subFraction(f1, f2));
-
-    cout << "Product: ";
-    printFraction(mulFraction(f1, f2));
-
-    cout << "Quotient: ";
-    printFraction(divFraction(f1, f2));
-
-    Fraction improper = { 10, 4 };
-    cout << "Improper fraction 10/4 reduced: ";
-    printFraction(improper);
-
-    cout << "\n=== Task 3: Washing Machine ===\n";
-
-    WashingMachine wm;
-    strcpy(wm.brand, "Redmi");
-    strcpy(wm.color, "Black");
-    wm.width = 60;
-    wm.length = 55;
-    wm.height = 85;
-    wm.power = 2.1;
-    wm.spinSpeed = 1200;
-    wm.maxTemperature = 90;
-
-    printWashingMachine(wm);
-
-    cout << "\n=== Task 4: Animal ===\n";
-
-    Animal dog;
-    fillAnimal(dog, "Labrador", "Dog", "Rex");
-    printAnimal(dog);
-    makeSound(dog);
-
-    Animal cat;
-    fillAnimal(cat, "Siamese", "Cat", "Whiskers");
-    printAnimal(cat);
-    makeSound(cat);
-
-    cout << "\n=== Task 5: Union Int ===\n";
-
-    IntUnion val;
-    val.signedValue = -1;
-
-    cout << "Signed: " << val.signedValue << "\n";
-    cout << "Unsigned: " << val.unsignedValue << "\n";
-
-    cout << "\n=== Task 6: Students ===\n";
-
-    Student single;
-    fillStudent(single, "Sahirov Yaroslav");
-    setGrade(single, 1, true);
-    setGrade(single, 2, true);
-    setGrade(single, 3, false);
-
-    printStudent(single);
-    cout << "Average grade: " << averageGrade(single) << "\n";
-
-    const int studentCount = 3;
-    Student students[studentCount];
-
-    fillStudent(students[0], "Monin Danylo");
-    fillStudent(students[1], "Slesarev Lev");
-    fillStudent(students[2], "Salenko Mykola");
-
-    setGrade(students[0], 1, true);
-    setGrade(students[0], 2, true);
-    setGrade(students[0], 3, true);
-
-    setGrade(students[1], 1, true);
-    setGrade(students[1], 2, false);
-
-    setGrade(students[2], 1, false);
-    setGrade(students[2], 2, false);
-
-    cout << "\nStudent list:\n";
-    printStudentList(students, studentCount);
-
-    cout << "\nGrades of student 0:\n";
-    printStudentGrades(students, studentCount, 0);
-
-    cout << "\n";
-    printDebtors(students, studentCount);
+        switch (choice) {
+        case 1:
+            task1();
+            break;
+        case 2:
+            task2();
+            break;
+        case 3:
+            task3();
+            break;
+        case 4:
+            task4();
+            break;
+        case 5:
+            task5();
+            break;
+        case 6:
+            task6();
+            break;
+        case 0:
+            break;
+        default:
+            std::cout << "Invalid choice\n";
+        }
+    } while (choice != 0);
 }
