@@ -1,254 +1,484 @@
 ﻿#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <string>
 
-using namespace std;
+// Task 1
 
-//1 
-void AddRow(int**& arr, int& rows, int cols, int* addrow) {
-	int** temp = new int* [rows + 1];
-	for (int i = 0; i < rows; i++)
-		temp[i] = arr[i];
+void addToEnd(int**& matrix, int& rows, int cols, int* newRow) {
+    int** temp = new int* [rows + 1];
 
-	temp[rows] = new int[cols];
+    for (int i = 0; i < rows; i++) {
+        temp[i] = matrix[i];
+    }
 
-	for (int j = 0; j < cols; j++)
-		temp[rows][j] = addrow[j];
+    temp[rows] = new int[cols];
 
-	delete[] arr;
+    for (int j = 0; j < cols; j++) {
+        temp[rows][j] = newRow[j];
+    }
 
-	arr = temp;
-	rows++;
+    delete[] matrix;
+    matrix = temp;
+    rows++;
 }
 
-void PrintArr(int** arr, int rows, int cols) {
-	for (int i = 0; i < rows; i++) {
-		for (int j = 0; j < cols; j++)
-			cout << arr[i][j] << ' ';
-	}
-	cout << '\n';
+// Task 2
+
+void addToBeginning(int**& matrix, int& rows, int cols, int* newRow) {
+    int** temp = new int* [rows + 1];
+
+    temp[0] = new int[cols];
+
+    for (int j = 0; j < cols; j++) {
+        temp[0][j] = newRow[j];
+    }
+
+    for (int i = 0; i < rows; i++) {
+        temp[i + 1] = matrix[i];
+    }
+
+    delete[] matrix;
+    matrix = temp;
+    rows++;
 }
-//2
-void AddRowBegin(int**& arr, int& rows, int cols, int* addrow) {
-	int** temp = new int* [rows + 1];
 
-	temp[0] = new int[cols];
-	
-	for (int j = 0; j < cols; j++)
-		temp[rows][j] = addrow[j];
+// Task 3
 
-	for (int i = 0; i < rows; i++)
-		temp[i] = arr[i];
+void addAtPosition(int**& matrix, int& rows, int cols, int* newRow, int position) {
+    if (position < 0 || position > rows) {
+        std::cout << "Invalid position\n";
+        return;
+    }
 
-	delete[] arr;
+    int** temp = new int* [rows + 1];
 
-	arr = temp;
-	rows++;
+    for (int i = 0; i < position; i++) {
+        temp[i] = matrix[i];
+    }
+
+    temp[position] = new int[cols];
+
+    for (int j = 0; j < cols; j++) {
+        temp[position][j] = newRow[j];
+    }
+
+    for (int i = position; i < rows; i++) {
+        temp[i + 1] = matrix[i];
+    }
+
+    delete[] matrix;
+    matrix = temp;
+    rows++;
 }
-//3 
-void AddRowPosition(int**& arr, int& rows, int cols, int* addrow , int pos) {
-	int** temp = new int* [rows + 1];
-	for (int i = 0; i < pos; i++)
-		temp[i] = arr[i];
 
-	temp[pos] = new int[cols];
+// Task 4
 
-	for (int j = 0; j < cols; j++)
-		temp[pos][j] = addrow[j];
+void task4() {
+    int rows, cols;
 
-	for (int i = pos; i < rows; i++)
-		temp[i + 1] = arr[i];
+    std::cout << "Enter rows and columns: ";
+    std::cin >> rows >> cols;
 
-	delete[] arr;
+    if (rows <= 0 || cols <= 0) {
+        std::cout << "Invalid size\n";
+        return;
+    }
 
-	arr = temp;
-	rows++;
+    int** matrix = new int* [rows];
+
+    for (int i = 0; i < rows; i++) {
+        matrix[i] = new int[cols];
+
+        for (int j = 0; j < cols; j++) {
+            matrix[i][j] = rand() % 10;
+        }
+    }
+
+    std::cout << "Original matrix:\n";
+
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            std::cout << matrix[i][j] << " ";
+        }
+        std::cout << "\n";
+    }
+
+    int newRows = 0;
+
+    for (int i = 0; i < rows; i++) {
+        bool hasZero = false;
+
+        for (int j = 0; j < cols; j++) {
+            if (matrix[i][j] == 0) {
+                hasZero = true;
+                break;
+            }
+        }
+
+        if (!hasZero) {
+            matrix[newRows] = matrix[i];
+            newRows++;
+        }
+        else {
+            delete[] matrix[i];
+        }
+    }
+
+    rows = newRows;
+
+    std::cout << "Result matrix:\n";
+
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            std::cout << matrix[i][j] << " ";
+        }
+        std::cout << "\n";
+    }
+
+    for (int i = 0; i < rows; i++) {
+        delete[] matrix[i];
+    }
+
+    delete[] matrix;
 }
-//4
-void RemoveRowsZero(int**& arr, int& rows, int cols) {
-	int count = 0;
 
-	for (int i = 0; i < rows; i++)
-	{
-		bool HasZero = false;
-		
-		for (int j = 0; j < cols; j++) {
-			if (arr[i][j] == 0) {
-				HasZero = true;
-				break;
-			}
-		}
-		if (HasZero)
-			count++;
-	}
-	int** temp = new int* [count];
-	int q = 0;
-	
-	for (int i = 0; i < rows; i++) {
-		bool HasZero = false;
-		
-		for (int j = 0; j < cols; j++) {
-			if (arr[i][j] == 0) {
-				HasZero = true;
-				break;
-			}
-		}
-		if (HasZero) {
-			temp[q] = arr[i];
-			q++;
-		}
-		else
-		{
-			delete[] arr[i];
-		}
-	}
-	delete[] arr;
+// Task 5
 
-	arr = temp;
-	rows = count;
+void task5() {
+    int rows, cols;
+
+    std::cout << "Enter rows and columns: ";
+    std::cin >> rows >> cols;
+
+    if (rows <= 0 || cols <= 0) {
+        std::cout << "Invalid size\n";
+        return;
+    }
+
+    int** A = new int* [rows];
+    int** B = new int* [rows];
+    int** C = new int* [rows];
+
+    for (int i = 0; i < rows; i++) {
+        A[i] = new int[cols];
+        B[i] = new int[cols];
+        C[i] = new int[cols];
+
+        for (int j = 0; j < cols; j++) {
+            A[i][j] = rand() % 10;
+            B[i][j] = rand() % 10;
+            C[i][j] = A[i][j] + B[i][j];
+        }
+    }
+
+    std::cout << "Array A:\n";
+
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            std::cout << A[i][j] << " ";
+        }
+        std::cout << "\n";
+    }
+
+    std::cout << "Array B:\n";
+
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            std::cout << B[i][j] << " ";
+        }
+        std::cout << "\n";
+    }
+
+    std::cout << "Result array:\n";
+
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            std::cout << C[i][j] << " ";
+        }
+        std::cout << "\n";
+    }
+
+    for (int i = 0; i < rows; i++) {
+        delete[] A[i];
+        delete[] B[i];
+        delete[] C[i];
+    }
+
+    delete[] A;
+    delete[] B;
+    delete[] C;
 }
-//5
 
+// Task 6
 
-int main()
-{
-//Task 1 - Write a function that adds a row to the end of a two-dimensional array.
-		//int rows = 4;
-		//int cols = 3;
+int** multiplyMatrices(int** A, int** B, int m, int n, int k) {
+    int** C = new int* [m];
 
-		//int** arr = new int* [rows];
-		//
-		//for (int i = 0; i < rows; i++)
-		//	arr[i] = new int[cols];
+    for (int i = 0; i < m; i++) {
+        C[i] = new int[k];
 
-		//arr[0][0] = 1;
-		//arr[0][1] = 2;
-		//arr[0][2] = 3;
+        for (int j = 0; j < k; j++) {
+            C[i][j] = 0;
 
-		//arr[1][0] = 4;
-		//arr[1][1] = 5;
-		//arr[1][2] = 6;
+            for (int x = 0; x < n; x++) {
+                C[i][j] += A[i][x] * B[x][j];
+            }
+        }
+    }
 
-		//cout << "<================>\n";
+    return C;
+}
 
-		//PrintArr(arr, rows, cols);
+void task6() {
+    int m, n, k;
 
-		//int addrow[] = { 7,8,9 };
+    std::cout << "Enter M, N and K: ";
+    std::cin >> m >> n >> k;
 
-		//AddRow(arr, rows, cols, addrow);
+    if (m <= 0 || n <= 0 || k <= 0) {
+        std::cout << "Invalid size\n";
+        return;
+    }
 
-		//cout << "<===============>\n";
+    int** A = new int* [m];
+    int** B = new int* [n];
 
-		//PrintArr(arr, rows, cols);
+    for (int i = 0; i < m; i++) {
+        A[i] = new int[n];
 
-		//for (int i = 0; i < rows; i++)
-		//	delete[] arr[i];
-		//
-		//delete[] arr;
-//Task 2 - Write a function that adds a row to the beginning of a two-dimensional array
-		//int rows = 4;
-		//int cols = 3;
+        for (int j = 0; j < n; j++) {
+            std::cout << "A[" << i << "][" << j << "]: ";
+            std::cin >> A[i][j];
+        }
+    }
 
-		//int** arr = new int* [rows];
-		//
-		//for (int i = 0; i < rows; i++)
-		//	arr[i] = new int[cols];
+    for (int i = 0; i < n; i++) {
+        B[i] = new int[k];
 
-		//arr[0][0] = 1;
-		//arr[0][1] = 2;
-		//arr[0][2] = 3;
+        for (int j = 0; j < k; j++) {
+            std::cout << "B[" << i << "][" << j << "]: ";
+            std::cin >> B[i][j];
+        }
+    }
 
-		//arr[1][0] = 4;
-		//arr[1][1] = 5;
-		//arr[1][2] = 6;
+    int** C = multiplyMatrices(A, B, m, n, k);
 
-		//cout << "<================>\n";
+    std::cout << "Result matrix:\n";
 
-		//PrintArr(arr, rows, cols);
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < k; j++) {
+            std::cout << C[i][j] << " ";
+        }
+        std::cout << "\n";
+    }
 
-		//int addrow[] = { 7,8,9 };
+    for (int i = 0; i < m; i++) {
+        delete[] A[i];
+        delete[] C[i];
+    }
 
-		//AddRowBegin(arr, rows, cols, addrow);
+    for (int i = 0; i < n; i++) {
+        delete[] B[i];
+    }
 
-		//cout << "<===============>\n";
+    delete[] A;
+    delete[] B;
+    delete[] C;
+}
 
-		//PrintArr(arr, rows, cols);
+// Task 7
 
-		//for (int i = 0; i < rows; i++)
-		//	delete[] arr[i];
-		//
-		//delete[] arr;
-//Task 3 - Write a function that adds a row to a two-dimensional array at a specified position.
-	    //int rows = 4;
-		//int cols = 3;
+void task7() {
+    int size;
 
-		//int** arr = new int* [rows];
-		//
-		//for (int i = 0; i < rows; i++)
-		//	arr[i] = new int[cols];
+    std::cout << "Enter array size: ";
+    std::cin >> size;
 
-		//arr[0][0] = 1;
-		//arr[0][1] = 2;
-		//arr[0][2] = 3;
+    if (size <= 0) {
+        std::cout << "Invalid size\n";
+        return;
+    }
 
-		//arr[1][0] = 4;
-		//arr[1][1] = 5;
-		//arr[1][2] = 6;
+    int* array = new int[size];
 
-		//cout << "<================>\n";
+    std::cout << "Enter array elements:\n";
 
-		//PrintArr(arr, rows, cols);
+    for (int i = 0; i < size; i++) {
+        std::cin >> array[i];
+    }
 
-		//int addrow[] = { 7,8,9 };
-		//int pos = 1;
+    std::cout << "Possible number of rows:\n";
 
-		//AddRowPosition(arr, rows, cols, addrow,pos);
+    for (int cols = 1; cols <= size; cols++) {
+        if (size % cols == 0) {
+            std::cout << size / cols << " rows and " << cols << " columns\n";
+        }
+    }
 
-		//cout << "<===============>\n";
+    int rows, cols;
 
-		//PrintArr(arr, rows, cols);
+    std::cout << "Enter rows and columns: ";
+    std::cin >> rows >> cols;
 
-		//for (int i = 0; i < rows; i++)
-		//	delete[] arr[i];
-		//
-		//delete[] arr;
-//Task 4 - Write a program that removes rows containing zero elements from a two-dimensional array filled with random numbers.
-		int rows = 4;
-		int cols = 3;
+    if (rows <= 0 || cols <= 0 || rows * cols != size) {
+        std::cout << "Invalid dimensions\n";
+        delete[] array;
+        return;
+    }
 
-		int** arr = new int* [rows];
-		
-		for (int i = 0; i < rows; i++)
-			arr[i] = new int[cols];
+    int** matrix = new int* [rows];
 
-		arr[0][0] = 1;
-		arr[0][1] = 2;
-		arr[0][2] = 3;
+    for (int i = 0; i < rows; i++) {
+        matrix[i] = new int[cols];
 
-		arr[1][0] = 4;
-		arr[1][1] = 5;
-		arr[1][2] = 6;
+        for (int j = 0; j < cols; j++) {
+            matrix[i][j] = array[i * cols + j];
+        }
+    }
 
-		arr[2][0] = 7;
-		arr[2][1] = 8;
-		arr[2][2] = 9;
+    std::cout << "Result matrix:\n";
 
-		arr[3][0] = 0;
-		arr[3][1] = 11;
-		arr[3][2] = 12;
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            std::cout << matrix[i][j] << " ";
+        }
+        std::cout << "\n";
+    }
 
-		cout << "<================>\n";
+    for (int i = 0; i < rows; i++) {
+        delete[] matrix[i];
+    }
 
-		PrintArr(arr, rows, cols);
+    delete[] matrix;
+    delete[] array;
+}
 
-		RemoveRowsZero(arr, rows, cols);
+// Task 8
 
-		cout << "<===============>\n";
+void task8() {
+    std::string names[5];
 
-		PrintArr(arr, rows, cols);
+    for (int i = 0; i < 5; i++) {
+        std::cout << "Enter surname " << i + 1 << ": ";
+        std::cin >> names[i];
+    }
 
-		for (int i = 0; i < rows; i++)
-			delete[] arr[i];
-		
-		delete[] arr;
-//Task 5 - Write a program that sums two dynamic two-dimensional arrays filled with random numbers element by element and stores the result in a third array. The sizes of the output arrays are specified by the user.
+    int longest = 0;
 
+    for (int i = 1; i < 5; i++) {
+        if (names[i].length() > names[longest].length()) {
+            longest = i;
+        }
+    }
+
+    std::cout << "Longest surname: " << names[longest] << "\n";
+}
+
+// Main
+
+int main() {
+    srand(static_cast<unsigned int>(time(nullptr)));
+
+    int choice;
+
+    do {
+        std::cout << "\n1. Add row to the end\n";
+        std::cout << "2. Add row to the beginning\n";
+        std::cout << "3. Add row at position\n";
+        std::cout << "4. Remove rows with zero elements\n";
+        std::cout << "5. Sum two matrices\n";
+        std::cout << "6. Multiply matrices\n";
+        std::cout << "7. Convert one-dimensional array to matrix\n";
+        std::cout << "8. Find longest surname\n";
+        std::cout << "0. Exit\n";
+        std::cout << "Choose task: ";
+        std::cin >> choice;
+
+        switch (choice) {
+        case 1:
+        case 2:
+        case 3: {
+            int rows, cols;
+
+            std::cout << "Enter rows and columns: ";
+            std::cin >> rows >> cols;
+
+            if (rows <= 0 || cols <= 0) {
+                std::cout << "Invalid size\n";
+                break;
+            }
+
+            int** matrix = new int* [rows];
+
+            for (int i = 0; i < rows; i++) {
+                matrix[i] = new int[cols];
+
+                for (int j = 0; j < cols; j++) {
+                    std::cout << "Enter element: ";
+                    std::cin >> matrix[i][j];
+                }
+            }
+
+            int* newRow = new int[cols];
+
+            std::cout << "Enter new row:\n";
+
+            for (int j = 0; j < cols; j++) {
+                std::cin >> newRow[j];
+            }
+
+            if (choice == 1) {
+                addToEnd(matrix, rows, cols, newRow);
+            }
+            else if (choice == 2) {
+                addToBeginning(matrix, rows, cols, newRow);
+            }
+            else {
+                int position;
+
+                std::cout << "Enter position (0 to " << rows << "): ";
+                std::cin >> position;
+
+                addAtPosition(matrix, rows, cols, newRow, position);
+            }
+
+            std::cout << "Result matrix:\n";
+
+            for (int i = 0; i < rows; i++) {
+                for (int j = 0; j < cols; j++) {
+                    std::cout << matrix[i][j] << " ";
+                }
+                std::cout << "\n";
+            }
+
+            for (int i = 0; i < rows; i++) {
+                delete[] matrix[i];
+            }
+
+            delete[] matrix;
+            delete[] newRow;
+            break;
+        }
+        case 4:
+            task4();
+            break;
+        case 5:
+            task5();
+            break;
+        case 6:
+            task6();
+            break;
+        case 7:
+            task7();
+            break;
+        case 8:
+            task8();
+            break;
+        case 0:
+            break;
+        default:
+            std::cout << "Invalid choice\n";
+        }
+    } while (choice != 0);
 }

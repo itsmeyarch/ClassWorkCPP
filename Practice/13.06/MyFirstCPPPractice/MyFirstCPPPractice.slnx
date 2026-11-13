@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="MyFirstCPPPractice.vcxproj" />
+  <Project Path="MyFirstCPPPractice.vcxproj" Id="002c4491-b21c-4bc5-8bfe-29803af7dc9d" />
 </Solution>
