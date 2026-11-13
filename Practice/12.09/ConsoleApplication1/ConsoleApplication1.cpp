@@ -1,119 +1,196 @@
-﻿
-#include <iostream>
-#include <numeric>
-using namespace std;
+﻿#include <iostream>
+#include <string>
+#include <fstream>
 
-class Fraction {
+class Student
+{
 private:
-    int numerator;
-    int denominator;
+    std::string fullName;
+    std::string birthDate;
+    std::string phone;
+    std::string city;
+    std::string country;
+    std::string institution;
+    std::string institutionCity;
+    std::string institutionCountry;
+    std::string groupNumber;
 
 public:
-    Fraction() {
-        numerator = 0;
-        denominator = 1;
+    void inputData()
+    {
+        std::cout << "Enter full name: ";
+        std::getline(std::cin, fullName);
+
+        std::cout << "Enter birth date: ";
+        std::getline(std::cin, birthDate);
+
+        std::cout << "Enter phone: ";
+        std::getline(std::cin, phone);
+
+        std::cout << "Enter city: ";
+        std::getline(std::cin, city);
+
+        std::cout << "Enter country: ";
+        std::getline(std::cin, country);
+
+        std::cout << "Enter educational institution: ";
+        std::getline(std::cin, institution);
+
+        std::cout << "Enter institution city: ";
+        std::getline(std::cin, institutionCity);
+
+        std::cout << "Enter institution country: ";
+        std::getline(std::cin, institutionCountry);
+
+        std::cout << "Enter group number: ";
+        std::getline(std::cin, groupNumber);
     }
 
-    void input() {
-        cout << "Enter numerator: ";
-        cin >> numerator;
-
-        do {
-            cout << "Enter denominator: ";
-            cin >> denominator;
-
-            if (denominator == 0) {
-                cout << "Denominator cannot be zero!\n";
-            }
-        } while (denominator == 0);
+    void showData()
+    {
+        std::cout << "\nStudent information:\n";
+        std::cout << "Full name: " << fullName << "\n";
+        std::cout << "Birth date: " << birthDate << "\n";
+        std::cout << "Phone: " << phone << "\n";
+        std::cout << "City: " << city << "\n";
+        std::cout << "Country: " << country << "\n";
+        std::cout << "Institution: " << institution << "\n";
+        std::cout << "Institution city: " << institutionCity << "\n";
+        std::cout << "Institution country: " << institutionCountry << "\n";
+        std::cout << "Group: " << groupNumber << "\n";
     }
 
-    void simplify() {
-        int gcdValue = gcd(abs(numerator), abs(denominator));
-
-        numerator /= gcdValue;
-        denominator /= gcdValue;
-
-        if (denominator < 0) {
-            numerator = -numerator;
-            denominator = -denominator;
-        }
+    std::string getFullName()
+    {
+        return fullName;
     }
 
-    void display() {
-        cout << numerator << "/" << denominator << '\n';
+    std::string getPhone()
+    {
+        return phone;
     }
 
-    Fraction add(Fraction other) {
-        Fraction result;
-        result.numerator = numerator * other.denominator +
-            other.numerator * denominator;
-        result.denominator = denominator * other.denominator;
-        result.simplify();
-        return result;
-    }
-
-    Fraction subtract(Fraction other) {
-        Fraction result;
-        result.numerator = numerator * other.denominator -
-            other.numerator * denominator;
-        result.denominator = denominator * other.denominator;
-        result.simplify();
-        return result;
-    }
-
-    Fraction multiply(Fraction other) {
-        Fraction result;
-        result.numerator = numerator * other.numerator;
-        result.denominator = denominator * other.denominator;
-        result.simplify();
-        return result;
-    }
-
-    Fraction divide(Fraction other) {
-        Fraction result;
-
-        if (other.numerator == 0) {
-            cout << "Division by zero is impossible!\n";
-            return result;
-        }
-
-        result.numerator = numerator * other.denominator;
-        result.denominator = denominator * other.numerator;
-        result.simplify();
-        return result;
+    std::string getGroupNumber()
+    {
+        return groupNumber;
     }
 };
 
-int main() {
-    Fraction first, second, result;
+class Point
+{
+private:
+    double x;
+    double y;
+    double z;
 
-    cout << "Enter first fraction:\n";
-    first.input();
+public:
+    void inputData()
+    {
+        std::cout << "Enter x: ";
+        std::cin >> x;
 
-    cout << "\nEnter second fraction:\n";
-    second.input();
+        std::cout << "Enter y: ";
+        std::cin >> y;
 
-    cout << "\nFirst fraction: ";
-    first.display();
+        std::cout << "Enter z: ";
+        std::cin >> z;
+    }
 
-    cout << "Second fraction: ";
-    second.display();
+    void showData()
+    {
+        std::cout << "X: " << x << "\n";
+        std::cout << "Y: " << y << "\n";
+        std::cout << "Z: " << z << "\n";
+    }
 
-    cout << "\nAddition: ";
-    result = first.add(second);
-    result.display();
+    void setX(double value)
+    {
+        x = value;
+    }
 
-    cout << "Subtraction: ";
-    result = first.subtract(second);
-    result.display();
+    void setY(double value)
+    {
+        y = value;
+    }
 
-    cout << "Multiplication: ";
-    result = first.multiply(second);
-    result.display();
+    void setZ(double value)
+    {
+        z = value;
+    }
 
-    cout << "Division: ";
-    result = first.divide(second);
-    result.display();
+    double getX()
+    {
+        return x;
+    }
 
+    double getY()
+    {
+        return y;
+    }
+
+    double getZ()
+    {
+        return z;
+    }
+
+    void saveToFile()
+    {
+        std::ofstream file("point.txt");
+
+        if (file.is_open())
+        {
+            file << x << "\n";
+            file << y << "\n";
+            file << z << "\n";
+
+            file.close();
+            std::cout << "Data saved\n";
+        }
+        else
+        {
+            std::cout << "File error\n";
+        }
+    }
+
+    void loadFromFile()
+    {
+        std::ifstream file("point.txt");
+
+        if (file.is_open())
+        {
+            file >> x >> y >> z;
+
+            file.close();
+            std::cout << "Data loaded\n";
+        }
+        else
+        {
+            std::cout << "File error\n";
+        }
+    }
+};
+
+int main()
+{
+    std::cout << "TASK 1\n";
+
+    Student student;
+    student.inputData();
+    student.showData();
+
+    std::cout << "\nTASK 2\n";
+
+    Point point;
+    point.inputData();
+
+    std::cout << "\nPoint coordinates:\n";
+    point.showData();
+
+    point.saveToFile();
+
+    Point secondPoint;
+    secondPoint.loadFromFile();
+
+    std::cout << "\nLoaded coordinates:\n";
+    secondPoint.showData();
 }
