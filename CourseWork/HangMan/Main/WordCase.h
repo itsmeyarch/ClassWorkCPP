@@ -13,7 +13,7 @@ private:
     std::string decrypt(const std::string& line) const;
 
 public:
-    WordCase(const std::string& fileName, unsigned char xorKey);
+    WordCase(const std::string& name, unsigned char key);
 
     std::vector<std::string> loadWords() const;
 };

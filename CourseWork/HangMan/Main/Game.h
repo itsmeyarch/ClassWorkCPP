@@ -4,12 +4,13 @@
 
 #include <string>
 #include <set>
+
 #include "WordCase.h"
 #include "Statistics.h"
 
 class Game {
 private:
-    WordCase WordCase;
+    WordCase wordCase;
     Statistics statistics;
 
     std::string secretWord;
@@ -18,9 +19,16 @@ private:
     int maxMistakes;
     int mistakes;
 
+    bool hintUsed;
+
     char readLetter() const;
     void showWord() const;
     void showHangman() const;
+    bool checkWin() const;
+
+    void chooseDifficulty();
+    void playGame();
+    void showMenu() const;
 
 public:
     Game();

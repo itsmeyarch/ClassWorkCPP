@@ -1,4 +1,5 @@
 #include "WordCase.h"
+
 #include <fstream>
 #include <sstream>
 #include <stdexcept>

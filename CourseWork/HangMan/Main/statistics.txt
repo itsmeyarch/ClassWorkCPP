@@ -16,3 +16,35 @@ Time: 125 seconds
 Attempts: 12
 Word: elephant
 Your letters: a e m b r g n c t l p h 
+-------------------
+Word: x{x~yysxxyx
+Time: 21 sec
+Attempts: 6
+Letters: ä A D W B a 
+-------------------------
+Result: Lose
+Time: 31 seconds
+Attempts: 7
+Word: sunshine
+Your letters: a b c d e f g 
+-------------------------
+Result: Lose
+Time: 21 seconds
+Attempts: 6
+Word: house
+Your letters: f a r b n m 
+-------------------------
+Result: Lose
+Attempts: 8
+Word: sunshine
+Your letters: f e r t n c z x 
+-------------------------
+Result: Lose
+Attempts: 5
+Word: keyboard
+Your letters: b c e v p 
+-------------------------
+Result: Lose
+Attempts: 11
+Word: school
+Your letters: d s g f e r t w q b n 
