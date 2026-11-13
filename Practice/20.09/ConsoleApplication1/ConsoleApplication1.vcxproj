@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{12f4406b-7b48-4622-8032-b4bf9646fc14}</ProjectGuid>
-    <RootNamespace>MyFirstCPPPraticeToday</RootNamespace>
+    <ProjectGuid>{e2213fc4-065b-499c-99e1-b857791d3308}</ProjectGuid>
+    <RootNamespace>ConsoleApplication1</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -139,7 +139,7 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="MyFirstCPPPraticeToday.cpp" />
+    <ClCompile Include="ConsoleApplication1.cpp" />
     <ClCompile Include="MyString.cpp" />
   </ItemGroup>
   <ItemGroup>
